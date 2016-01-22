@@ -6,12 +6,22 @@
             [dommy.core :as dom]))
 
 
+;; utils
+(defn visable-option? [o filter-by selected]
+  (and
+   (string/includes? (:text o)
+                     filter-by)
+   (not (contains? selected o))))
+
+(defn filter-options [options filter-by selected]
+  (filterv #(visable-option? % filter-by selected) options))
+
+
+;; `orig' hidden option
 (defn option [option]
   [:option {:value (:value option)}
    (:text option)])
 
-
-;; `orig' hidden option
 (defn select [attrs options selected]
   [:select {:multiple (:multiple @attrs)
             :style {:display "none"}
@@ -73,19 +83,12 @@
   (let [options (reaction (get @state :options []))
         selected (reaction (get @state :selected #{}))
         filter-by (reaction (get @state :filter-by ""))
-        options-filtred (reaction
-                         (doall (filter
-                                 (fn [o]
-                                   (and
-                                    (string/includes? (:text o)
-                                                      @filter-by)
-                                    (not (contains? @selected o))))
-                          @options)))
+        filtred-options (reaction (filter-options @options @filter-by @selected))
         attrs (reaction (:attrs @state))]
     (fn [state]
       [:div.reselect
        [select attrs options selected]
        [:div.input-wrapper
         [input state]
-        [custom-select options-filtred state]]
+        [custom-select filtred-options state]]
        [custom-select-selected selected state]])))
