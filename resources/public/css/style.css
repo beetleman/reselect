@@ -22,7 +22,7 @@
 }
 
 .reselect div.custom-select {
-  max-height: 100px;
+  max-height: 300px;
   max-width: 400px;
   position: absolute;
   z-index: 1;
@@ -37,6 +37,10 @@
 .reselect div.custom-option:hover,
 .reselect div.custom-option.hover {
   background-color: blue;
+}
+
+.reselect div.custom-option {
+  border: 1px solid #ddd;
 }
 
 .reselect div.custom-option-selected:hover {
