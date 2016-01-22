@@ -61,7 +61,7 @@
 
 ;; filter input
 (defn input-on-change-fn [state]
-  (fn [e]
+  (fn [_]
     (swap! state assoc :filter-by (dom/value (.-target e)))))
 
 (defn input [state]
