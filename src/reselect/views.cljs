@@ -25,7 +25,8 @@
 (defn select [attrs options selected]
   [:select {:multiple (:multiple attrs)
             :style {:display "none"}
-            :defaultValue (mapv :value @selected)
+            :value (mapv :value @selected)
+            :readOnly true
             :name (:name attrs)}
    (for [o options]
      ^{:key (:value o)} [option o])])
