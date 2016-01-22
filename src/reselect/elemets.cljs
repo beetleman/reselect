@@ -7,18 +7,18 @@
 
 
 (defn option [option]
-  [:option {:value (:value option)
-            :key (:value option)}
+  [:option {:value (:value option)}
    (:text option)])
 
 
 ;; `orig' hidden option
 (defn select [attrs options selected]
-  (into [:select {:multiple (:multiple @attrs)
-                  :style {:display "none"}
-                  :value (map :value @selected)
-                  :name (:name @attrs)}]
-        (map option @options)))
+  [:select {:multiple (:multiple @attrs)
+            :style {:display "none"}
+            :value (mapv :value @selected)
+            :name (:name @attrs)}
+   (for [o @options]
+     ^{:key o} [option o])])
 
 
 ;; custom-option
@@ -31,13 +31,13 @@
         value (:value option)]
     [:div.custom-option
      {:data-value value
-      :key value
       :on-click (custom-option-on-click-fn option state)}
      text]))
 
 (defn custom-select [options-filtred state]
-  (into [:div.custom-select ]
-        (map #(custom-option % state) @options-filtred)))
+  [:div.custom-select
+   (for [o @options-filtred]
+     ^{:key o} [custom-option o state])])
 
 
 ;; custom-option-selected
@@ -50,13 +50,13 @@
         value (:value option)]
     [:div.custom-option-selected
      {:data-value value
-      :on-click (custom-option-selected-on-click-fn option state)
-      :key value}
+      :on-click (custom-option-selected-on-click-fn option state)}
      text]))
 
 (defn custom-select-selected [selected state]
-  (into [:div.custom-select-selected]
-        (map #(custom-option-selected % state) @selected)))
+  [:div.custom-select-selected
+   (for [o @selected]
+     ^{:key o} [custom-option-selected o state])])
 
 
 ;; filter input
