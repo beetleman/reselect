@@ -1,6 +1,7 @@
 (ns reselect.core
   (:require [reagent.core :as reagent :refer [atom]]
             [dommy.utils :refer [->Array]]
+            [reselect.elements :as el]
             [dommy.core :as dom :refer-macros [sel sel1]]))
 
 (enable-console-print!)
@@ -10,18 +11,10 @@
     (-> (first args) clj->js js/console.debug)
     (recur (rest args))))
 
-
-(defonce app-state (atom {:text "Hello world!"}))
-(add-watch app-state :logger #(logger %4))
-
-(defn hidden-options [options multiple]
-  [:div
-   [:h1 (:text @app-state)]
-   (into [:select {:multiple multiple
-                   :name "todo!"
-                   :style {:display "none"}}]
-         (map (fn [x] [:option {:value (:value x)}
-                       (:text x)]) options))])
+(defn create-state [initial-state]
+  (let [app-state (atom initial-state)]
+    (add-watch app-state :logger #(logger %4))
+    app-state))
 
 (defn options->map [options]
   (map
@@ -43,12 +36,15 @@
 
 (defn ^:export create [target_id]
   (let [selector [target_id :select]
-        options (options->map (sel-options selector))
-        multiple (select-multiple? selector)
-        name (get-select-name selector)
-        selected-options (options->map (sel-selected-options selector))]
-    (logger multiple)
-    (reagent/render-component [hidden-options options multiple]
+        el-options (options->map (sel-options selector))
+        el-selected-options (options->map (sel-selected-options selector))
+        app-state (create-state
+                   {:attrs {:multiple (select-multiple? selector)
+                            :name (get-select-name selector)}
+                    :options (options->map (sel-options selector))
+                    :selected (set (options->map
+                                    (sel-selected-options selector)))})]
+    (reagent/render-component [(el/document-root-fn app-state) app-state]
                               (sel1 target_id))))
 
 (defn on-js-reload []
