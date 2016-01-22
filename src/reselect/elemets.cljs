@@ -43,7 +43,6 @@
 ;; custom-option-selected
 (defn custom-option-selected-on-click-fn [option state]
   (fn [_]
-    (.log js/console option)
     (swap! state update :selected #(set/difference % #{option}))))
 
 (defn custom-option-selected [option state]
@@ -65,9 +64,8 @@
   (fn [e]
     (swap! state assoc :filter-by (dom/value (.-target e)))))
 
-(defn input [state filter-by]
-  [:div
-   [:input {:on-change (input-on-change-fn state)}]])
+(defn input [state]
+  [:input {:on-change (input-on-change-fn state)}])
 
 
 ;; document-root
@@ -87,6 +85,7 @@
     (fn [state]
       [:div.reselect
        [select attrs options selected]
-       [input state options-filtred]
-       [custom-select options-filtred state]
+       [:div.input-wrapper
+        [input state]
+        [custom-select options-filtred state]]
        [custom-select-selected selected state]])))
