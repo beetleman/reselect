@@ -1,4 +1,4 @@
-(ns reselect.elements
+(ns reselect.views
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [reagent.core :as reagent]
             [clojure.string :as string]

@@ -1,7 +1,7 @@
 (ns reselect.core
   (:require [reagent.core :as reagent :refer [atom]]
             [dommy.utils :refer [->Array]]
-            [reselect.elements :as el]
+            [reselect.views :refer [document-root-fn]]
             [dommy.core :as dom :refer-macros [sel sel1]]))
 
 (enable-console-print!)
@@ -44,7 +44,7 @@
                     :options (options->map (sel-options selector))
                     :selected (set (options->map
                                     (sel-selected-options selector)))})]
-    (reagent/render-component [(el/document-root-fn app-state)]
+    (reagent/render-component [(document-root-fn app-state)]
                               (sel1 target_id))))
 
 (defn on-js-reload []
