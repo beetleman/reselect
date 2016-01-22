@@ -23,12 +23,12 @@
    (:text option)])
 
 (defn select [attrs options selected]
-  [:select {:multiple (:multiple @attrs)
+  [:select {:multiple (:multiple attrs)
             :style {:display "none"}
-            :value (mapv :value @selected)
-            :name (:name @attrs)}
-   (for [o @options]
-     ^{:key o} [option o])])
+            :defaultValue (mapv :value @selected)
+            :name (:name attrs)}
+   (for [o options]
+     ^{:key (:value o)} [option o])])
 
 
 ;; custom-option
@@ -40,14 +40,13 @@
   (let [text (:text option)
         value (:value option)]
     [:div.custom-option
-     {:data-value value
-      :on-click (custom-option-on-click-fn option state)}
+     {:on-click (custom-option-on-click-fn option state)}
      text]))
 
 (defn custom-select [options-filtred state]
   [:div.custom-select
    (for [o @options-filtred]
-     ^{:key o} [custom-option o state])])
+     ^{:key (:value o)} [custom-option o state])])
 
 
 ;; custom-option-selected
@@ -59,14 +58,13 @@
   (let [text (:text option)
         value (:value option)]
     [:div.custom-option-selected
-     {:data-value value
-      :on-click (custom-option-selected-on-click-fn option state)}
+     {:on-click (custom-option-selected-on-click-fn option state)}
      text]))
 
 (defn custom-select-selected [selected state]
   [:div.custom-select-selected
    (for [o @selected]
-     ^{:key o} [custom-option-selected o state])])
+     ^{:key (:value o)} [custom-option-selected o state])])
 
 
 ;; filter input
@@ -80,12 +78,12 @@
 
 ;; document-root
 (defn document-root-fn [state]
-  (let [options (reaction (get @state :options []))
-        selected (reaction (get @state :selected #{}))
-        filter-by (reaction (get @state :filter-by ""))
-        filtred-options (reaction (filter-options @options @filter-by @selected))
-        attrs (reaction (:attrs @state))]
-    (fn [state]
+  (let [options (:options @state)
+        attrs (:attrs @state)
+        selected (reaction (:selected @state))
+        filter-by (reaction (:filter-by @state))
+        filtred-options (reaction (filter-options options @filter-by @selected))]
+    (fn []
       [:div.reselect
        [select attrs options selected]
        [:div.input-wrapper

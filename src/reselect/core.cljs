@@ -13,7 +13,6 @@
 
 (defn create-state [initial-state]
   (let [app-state (atom initial-state)]
-    (add-watch app-state :logger #(logger %4))
     app-state))
 
 (defn options->map [options]
@@ -41,10 +40,11 @@
         app-state (create-state
                    {:attrs {:multiple (select-multiple? selector)
                             :name (get-select-name selector)}
+                    :filter-by ""
                     :options (options->map (sel-options selector))
                     :selected (set (options->map
                                     (sel-selected-options selector)))})]
-    (reagent/render-component [(el/document-root-fn app-state) app-state]
+    (reagent/render-component [(el/document-root-fn app-state)]
                               (sel1 target_id))))
 
 (defn on-js-reload []
