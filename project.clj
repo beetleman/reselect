@@ -22,7 +22,8 @@
 
   :source-paths ["src"]
 
-  :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
+  :clean-targets ^{:protect false} ["resources/public/js/compiled"
+                                    "target" "release"]
 
   :cljsbuild {:builds
               [{:id "dev"
@@ -40,7 +41,7 @@
                ;; lein cljsbuild once min
                {:id "min"
                 :source-paths ["src"]
-                :compiler {:output-to "resources/public/js/compiled/reselect.js"
+                :compiler {:output-to "release/reselect.min.js"
                            :main reselect.core
                            :optimizations :advanced
                            :pretty-print false}}]}
