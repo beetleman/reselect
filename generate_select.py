@@ -11,13 +11,14 @@ from faker import Factory
 
 
 OPTION_TMPL = '<option value="{value}">{text}</option>'
+OPTION_SELCTED_TMPL = '<option selected value="{value}">{text}</option>'
 SITE_TMPL = '''
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link href="css/reselect.css" rel="stylesheet" type="text/css">
     </head>
     <body>
         <div id="app">
@@ -34,13 +35,22 @@ SITE_TMPL = '''
 </html>
 '''
 
-def text(faker):
-    return '{name} <{email}>'.format(name=faker.name(), email=faker.email())
 
-def generate_options(n, js):
-    faker  = Factory.create()
-    options = {OPTION_TMPL.format(value=value, text=text(faker))
-               for value in range(n)}
+def text(faker):
+    return '{name} &lt;{email}&gt;'.format(name=faker.name(), email=faker.email())
+
+
+def option(value, faker):
+    if value <= 1:
+        tmpl = OPTION_SELCTED_TMPL
+    else:
+        tmpl = OPTION_TMPL
+    return tmpl.format(value=value, text=text(faker))
+
+
+def generate_selection(n, js):
+    faker = Factory.create()
+    options = {option(value, faker) for value in range(n)}
     return SITE_TMPL.format(
         options='\n                '.join(options),
         js=js
@@ -57,7 +67,7 @@ def main():
     args = parser.parse_args()
     n = args.n
     js = args.js
-    print(generate_options(n, js))
+    print(generate_selection(n, js))
 
 
 if __name__ == '__main__':

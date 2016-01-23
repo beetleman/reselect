@@ -23,7 +23,7 @@
   :source-paths ["src"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled"
-                                    "target" "release"]
+                                    "target"]
 
   :cljsbuild {:builds
               [{:id "dev"

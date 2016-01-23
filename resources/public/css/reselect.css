@@ -1,0 +1,49 @@
+/* some style */
+
+.reselect div.selected {
+  color: red;
+}
+
+.reselect div.input-wrapper {
+  max-width: 400px;
+}
+.reselect div.input-wrapper input {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.reselect div.input-wrapper:hover div.custom-select,
+.reselect div.input-wrapper input:focus ~ .custom-select{
+  display: block;
+}
+
+.reselect div.custom-select.hover {
+  display: block;
+}
+
+.reselect div.custom-select {
+  max-height: 300px;
+  max-width: 400px;
+  position: absolute;
+  z-index: 1;
+  background: white;
+  display: none;
+  -webkit-box-shadow: 0px 0px 21px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 21px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 21px 0px rgba(0,0,0,0.75);
+  overflow-y: scroll;
+}
+
+.reselect div.custom-option:hover,
+.reselect div.custom-option.hover {
+  background-color: blue;
+}
+
+.reselect div.custom-option {
+  border: 1px solid #ddd;
+}
+
+.reselect div.custom-option-selected:hover {
+  background-color: red;
+}
