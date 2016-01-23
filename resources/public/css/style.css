@@ -13,7 +13,8 @@
   z-index: 2;
 }
 
-.reselect div.input-wrapper:hover div.custom-select {
+.reselect div.input-wrapper:hover div.custom-select,
+.reselect div.input-wrapper input:focus ~ .custom-select{
   display: block;
 }
 
