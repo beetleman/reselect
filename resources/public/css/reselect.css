@@ -35,7 +35,6 @@
   overflow-y: scroll;
 }
 
-.reselect div.custom-option:hover,
 .reselect div.custom-option.hover {
   background-color: blue;
 }
