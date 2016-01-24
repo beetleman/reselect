@@ -53,12 +53,31 @@
       :on-click (custom-option-on-click-fn option state)}
      text]))
 
-(defn custom-select [options-filtred hover-index state]
+(defn custom-select-render [options-filtred hover-index state]
   (let [hi @hover-index]
     [:div.custom-select
      (map-indexed
       (fn [i o] ^{:key (:value o)} [custom-option o (= i hi) state i])
       @options-filtred)]))
+
+(defn custom-select-scroller [this]
+  (let [[_ options-filtred hover-index state] (reagent/argv this)
+        node (reagent/dom-node this)
+        hovered-node (aget node "childNodes" @hover-index)
+        hovered-height (.-offsetHeight hovered-node)
+        hovered-top (.-offsetTop hovered-node)
+        min-top (.-scrollTop node)
+        max-top (+ (.-offsetHeight node) min-top (- 0 hovered-height))]
+    (cond
+      (< hovered-top min-top)
+      (aset node "scrollTop" hovered-top)
+      (> hovered-top max-top)
+      (aset node "scrollTop" (+ min-top hovered-height)))))
+
+(def custom-select
+  (with-meta custom-select-render
+    {:component-did-mount custom-select-scroller
+     :component-did-update custom-select-scroller}))
 
 
 ;; custom-option-selected
